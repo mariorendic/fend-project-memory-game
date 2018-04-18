@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-const cards = [
+var cards = [
 	'fa-anchor',
     'fa-anchor',
     'fa-bicycle',
@@ -44,6 +44,22 @@ function shuffle(array) {
     return array;
 }
 
+cards = shuffle(cards);
+
+// Create cards
+const deckListItems = document.createDocumentFragment();
+for(const card of cards){
+	const li = document.createElement('li');
+	li.classList.add('card');
+	const i = document.createElement('i');
+	i.classList.add('fa');
+	i.classList.add(card);
+	li.appendChild(i);
+	deckListItems.appendChild(li);
+}
+
+const deck = document.querySelector('.deck');
+deck.appendChild(deckListItems);
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -55,3 +71,20 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+//Click listener to cards
+ var cardClick = document.getElementsByClassName('card');
+
+for (var i = 0 ; i < cardClick.length; i++) {
+   cardClick[i].addEventListener('click' , cardCompare , false ) ;
+}
+//Click count
+var count = 0;
+
+ function cardCompare(){
+ 	count++;
+let clickedCard = this.classList;
+clickedCard.toggle('show');
+clickedCard.toggle('open');
+console.log(this.classList);
+console.log(count);
+ };
