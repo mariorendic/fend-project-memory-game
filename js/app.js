@@ -1,6 +1,9 @@
 /*
  * Create a list that holds all of your cards
  */
+ /*jshint esversion: 6 */
+ /*globals $:false */
+
 let cardLists = [
                     "fa-diamond",
                     "fa-paper-plane-o",
@@ -19,7 +22,8 @@ let matchFound = 0;
 let gameStarted = false;
 
 // timer object
-let timer = new Timer();
+var Timer = new Timer();
+let timer = Timer;
 timer.addEventListener('secondsUpdated', function (e) {                   $('#timer').html(timer.getTimeValues().toString());
 });
 
@@ -28,14 +32,14 @@ $('#reset-button').click(resetGame);
 // create and append card html
 const createCard = card => {
     $('#deck').append(`<li class="card animated"><i class="fa ${card}"></i></li>`);
-}
+};
 // generate random cards on the deck
 const generateCards = () => {
     for (let i = 0; i < 2; i++) {
         cardLists = shuffle(cardLists);
         cardLists.forEach(createCard);
     }
-}
+};
 // Shuffle function from http://stackoverflow.com/a/2450976
 const shuffle = array => {
     let currentIndex = array.length,
@@ -48,15 +52,15 @@ const shuffle = array => {
         array[randomIndex] = temporaryValue;
     }
     return array;
-}
+};
 // Array to keep track of open cards
-openCards = [];
+let openCards = [];
 
 // card functionality
 function toggleCard() {
 
     // start the timer when first card is opened
-    if (gameStarted == false) {
+    if (gameStarted === false) {
         gameStarted = true;
         timer.start();
     }
@@ -79,11 +83,11 @@ const disableCLick = () => {
     openCards.forEach(function (card) {
         card.off('click');
     });
-}
+};
 // enable click on the open card
 const enableClick = () => {
     openCards[0].click(toggleCard);
-}
+};
 // check openCards if they match or not
 const matchOpenCards = () => {
     if (openCards[0][0].firstChild.className == openCards[1][0].firstChild.className) {
@@ -100,7 +104,7 @@ const matchOpenCards = () => {
         enableClick();
         removeOpenCards();
     }
-}
+};
 
 // function to remove openCards
 const removeOpenCards = () => openCards = [];
@@ -125,14 +129,14 @@ const updateMoves = () => {
     else if (moves == 15) {
         addBlankStar();
     }
-}
+};
 // check whether the game is finished or not
 const checkWin = () => {
     matchFound += 1;
     if (matchFound == 8) {
         showResults();
     }
-}
+};
 // add blank stars
 function addBlankStar() {
     $('#stars').children()[0].remove();
@@ -163,6 +167,7 @@ function playGame() {
     $('.card').click(toggleCard);
     $('#moves').html("0 Moves");
     addStars(3);
+    cardSize();
 }
 // shows result on end game
 const showResults = () => {
@@ -198,7 +203,16 @@ const showResults = () => {
     $('#sucess-result')[0].style.display = "block";
     $('#sucess-result').append($(scoreBoard));
     $('#restart').click(resetGame);
-}
+};
 
 // start the game
 playGame();
+
+
+// card height equal to width
+function cardSize(){
+    var cardWidth = $('.card').width();
+    $('.card').height(cardWidth);
+}
+
+$(window).on('resize load', cardSize);
